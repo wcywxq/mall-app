@@ -4,7 +4,7 @@
 		$uname=$_POST['uname'];
 		$pass=$_POST['pass'];
 		
-		if($uname=="admin" and )
+		if($uname=="admin" and 1)
 	}
 	//
 	/*
