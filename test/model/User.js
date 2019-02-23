@@ -6,7 +6,7 @@ const userSchema = new Schema({
     userId: Schema.Types.ObjectId,
     userName: { type: String, unique: true },
     password: String,
-    createDate: { type: Date, default: Date.now }
+    createDate: { type: Date, default: Date.now() }
 })
 userSchema.pre('save', function(next) {
     bcrypt.genSalt(10, (err, salt) => {

@@ -20,4 +20,10 @@ router.get('/insertType', async ctx => {
     })
     ctx.body = '导入数据'
 })
+router.get('/getTypes', async ctx => {
+    const Type = mongoose.model('Type')
+    await Type.find({}).exec().then(res => {
+        ctx.body = res
+    })
+})
 module.exports = router

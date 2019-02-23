@@ -6,7 +6,9 @@
         <van-icon name="search" slot="left" @click="showSearch"/>
         <p slot="title" class="nav-title-text">{{ activeName }}</p>
         <van-icon slot="right" @click="goLogin">
-          <span style="font-size: 0.24rem;">{{ userInfo.userName }}</span>
+          <span
+            style="font-size: 0.24rem;"
+          >{{ JSON.stringify(userInfo) === '{}' ? '未登陆' : userInfo.userName }}</span>
         </van-icon>
       </van-nav-bar>
     </section>
@@ -30,35 +32,53 @@
     </transition>
     <transition name="fade" mode="out-in">
       <keep-alive>
-        <router-view></router-view>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
     </transition>
+    <transition name="fade">
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
     <!-- tabbar -->
-    <van-tabbar v-model="$store.state.activeTabbar" @change="tabName">
-      <van-tabbar-item icon="home-o" to="/">首页</van-tabbar-item>
-      <van-tabbar-item icon="records" to="/category">分类</van-tabbar-item>
-      <van-tabbar-item icon="cart-o" info="5" to="/cart">购物车</van-tabbar-item>
-      <van-tabbar-item icon="contact" to="/profile">我的</van-tabbar-item>
-    </van-tabbar>
+    <router-view name="footer-bar"></router-view>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      activeName: "首页",
       // 搜索
       value: "",
-      isShow: false
+      isShow: false,
+      activeName: "首页"
     };
+  },
+  watch: {
+    "$route.path": function(curVal) {
+      console.log(curVal);
+      switch (curVal) {
+        case "/":
+          this.activeName = "首页";
+          localStorage.setItem("active", 0);
+          break;
+        case "/category":
+          this.activeName = "分类";
+          localStorage.setItem("active", 1);
+        case "/cart":
+          this.activeName = "购物车";
+          localStorage.setItem("active", 2);
+        case "/profile":
+          this.activeName = "我的";
+          localStorage.setItem("active", 3);
+          break;
+      }
+    }
   },
   computed: {
     ...mapState(["status", "userInfo"])
   },
   methods: {
-    ...mapMutations(["changeActive"]),
     // 展示搜索框
     showSearch() {
       this.isShow = true;
@@ -88,31 +108,8 @@ export default {
     },
     // 跳转登陆
     goLogin() {
-      // if (this.status == 0) {
-      //   this.$router.push("/profile/enter");
-      // } else {
-      //   this.$router.push("/profile/info");
-      // }
+      // 存储url
       this.$router.push("/profile");
-      this.changeActive(3);
-      this.activeName = "我的";
-    },
-    tabName(val) {
-      console.log(val);
-      switch (val) {
-        case 0:
-          this.activeName = "首页";
-          break;
-        case 1:
-          this.activeName = "分类";
-          break;
-        case 2:
-          this.activeName = "购物车";
-          break;
-        default:
-          this.activeName = "我的";
-          break;
-      }
     }
   }
   // watch: {
@@ -135,12 +132,11 @@ export default {
 }
 .fade-enter {
   opacity: 0;
-  transform: translateX(-100%);
+  transform: translateX(100%);
 }
 .fade-leave-to {
   opacity: 0;
-  transform: translateX(100%);
-  // position: absolute;
+  transform: translateX(-100%);
 }
 .fade-enter-active,
 .fade-leave-active {

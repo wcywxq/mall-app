@@ -22,7 +22,7 @@ router.post('/loginUser', async ctx => {
     const loginUser = ctx.request.body
     const { userName, password } = loginUser
     const User = mongoose.model('User')
-    await User.findOne({ userName }).then(async result => {
+    await User.findOne({ userName }).exec().then(async result => {
         if(result) {
             const newUser = new User()
             await newUser.comparePassword(password, result.password).then(isMatch => {

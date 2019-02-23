@@ -24,26 +24,35 @@ import {
   Cell,
   CellGroup,
   Field,
-  Tag
+  Tag,
+  Row,
+  Col,
+  List,
+  GoodsAction,
+  GoodsActionBigBtn,
+  GoodsActionMiniBtn,
+  Card,
+  SubmitBar
 } from 'vant'
-Vue.use(Button).use(Icon).use(NavBar).use(Tabbar).use(TabbarItem).use(Swipe).use(SwipeItem).use(Lazyload).use(Search).use(PullRefresh).use(Toast).use(Tab).use(Tabs).use(Cell).use(CellGroup).use(Field).use(Tag)
+Vue.use(Button).use(Icon).use(NavBar).use(Tabbar).use(TabbarItem).use(Swipe).use(SwipeItem).use(Lazyload).use(Search).use(PullRefresh).use(Toast).use(Tab).use(Tabs).use(Cell).use(CellGroup).use(Field).use(Tag).use(Row).use(Col).use(List).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn).use(Card).use(SubmitBar)
 //  mock数据
 import '@/mock/mock.js'
 
 // 登录状态判断
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.auth)) {
-//     if (store.state.status == 1) {
-//       next()
-//     } else {
-//       next({
-//         path: '/profile/noLogin'
-//       })
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.auth)) {
+    // 如果登陆则进入
+    if (store.state.status == 1) {
+      next()
+    } else {
+      next({
+        path: '/profile'
+      })
+    }
+  } else {
+    next()
+  }
+})
 
 Vue.config.productionTip = false
 

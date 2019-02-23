@@ -18,11 +18,13 @@ const Router = require('koa-router')
 let user = require('./controller/user.js')
 let product = require('./controller/product.js')
 let type = require('./controller/type.js')
+let cart = require('./controller/cart.js')
 const router = new Router()
 // '/user'代表控制器名称，必须和请求的地址相对应
 router.use('/user', user.routes());
 router.use('/product', product.routes());
 router.use('/type', type.routes());
+router.use('/cart', cart.routes());
 app.use(router.routes())
 app.use(router.allowedMethods())
 

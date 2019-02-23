@@ -63,12 +63,9 @@ export default {
       registPassword: ""
     };
   },
-  computed: {
-    ...mapState(["activeTabbar"])
-  },
   methods: {
     // vuex
-    ...mapActions(["activeAction", "statusAction", "loginAction"]),
+    ...mapActions(["statusAction", "loginAction"]),
     // 注册处理函数
     registeHandler() {
       axios({
@@ -117,8 +114,7 @@ export default {
                 this.statusAction(1);
                 this.loginAction(res.data.userInfo);
                 this.loginUsername = this.loginPassword = "";
-                this.$router.push("/");
-                this.activeAction(0);
+                this.$router.go(-1);
               })
               .catch(err => {
                 console.log(err);

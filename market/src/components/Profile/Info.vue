@@ -48,12 +48,11 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapMutations(["changeStatus", "changeLogin"]),
+    ...mapMutations(["changeStatus"]),
     exit() {
       this.$toast.success("已退出登陆");
       this.changeStatus(0);
-      this.changeLogin({ userName: "未登录" });
-      this.$router.push("/");
+      this.$router.go(-1);
     }
   }
 };
