@@ -57,10 +57,17 @@
   |-- `test`  // 测试文件夹
 ## 运行
 + 前端项目：
-> cd market 
-> npm i 
-> npm run serve
+
+> `cd market` 
+
+> `npm i` 
+
+> `npm run serve`
+
 + 后端项目：
-> cd server
-> npm i
+
+> `cd server`
+
+> `npm i`
+
 > node ./index.js
