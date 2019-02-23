@@ -1,5 +1,12 @@
 # 移动端商城
-# 项目目录：
+## 项目介绍
+
+> 本项目前端采用`vue + vuex + vant`
+> 本项目后端采用`koa2`
+> 本项目数据库采用`mongodb`
+> 采用前后端数据分离的方式，前端通过`ajax`方式获取后端数据；
+
+## 项目目录：
   |-- `server`  // 服务端项目目录
 
     |-- `controller` // 控制器入口
@@ -45,3 +52,12 @@
     |--  `.browserslistrc` // 分享目标浏览器和nodejs版本在不同的前端工具配置文件
 
   |-- `test`  // 测试文件夹
+## 运行
++ 前端项目：
+> cd market 
+> npm i 
+> npm run serve
++ 后端项目：
+> cd server
+> npm i
+> node ./index.js
