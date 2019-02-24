@@ -133,7 +133,6 @@ export default {
 
 <style lang="scss" scoped>
 .category {
-  margin-top: 0.92rem;
   margin-bottom: 1rem;
 }
 .nav {
@@ -151,7 +150,7 @@ export default {
 }
 .container {
   position: fixed;
-  top: 1.84rem;
+  top: 0.92rem;
   bottom: 1rem;
   right: 0;
   overflow-y: scroll;

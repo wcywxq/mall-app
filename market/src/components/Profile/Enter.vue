@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     // vuex
-    ...mapActions(["statusAction", "loginAction"]),
+    ...mapActions(["statusAction", "loginAction", "getCartAction"]),
     // 注册处理函数
     registeHandler() {
       axios({
@@ -115,6 +115,7 @@ export default {
                 this.loginAction(res.data.userInfo);
                 this.loginUsername = this.loginPassword = "";
                 this.$router.go(-1);
+                this.getCartAction();
               })
               .catch(err => {
                 console.log(err);

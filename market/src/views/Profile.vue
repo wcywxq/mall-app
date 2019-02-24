@@ -23,6 +23,5 @@ export default {
 
 <style lang="scss" scoped>
 .profile {
-  margin-top: 0.92rem;
 }
 </style>

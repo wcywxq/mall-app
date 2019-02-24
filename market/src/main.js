@@ -32,9 +32,11 @@ import {
   GoodsActionBigBtn,
   GoodsActionMiniBtn,
   Card,
-  SubmitBar
+  SubmitBar,
+  Switch,
+  Stepper
 } from 'vant'
-Vue.use(Button).use(Icon).use(NavBar).use(Tabbar).use(TabbarItem).use(Swipe).use(SwipeItem).use(Lazyload).use(Search).use(PullRefresh).use(Toast).use(Tab).use(Tabs).use(Cell).use(CellGroup).use(Field).use(Tag).use(Row).use(Col).use(List).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn).use(Card).use(SubmitBar)
+Vue.use(Button).use(Icon).use(NavBar).use(Tabbar).use(TabbarItem).use(Swipe).use(SwipeItem).use(Lazyload).use(Search).use(PullRefresh).use(Toast).use(Tab).use(Tabs).use(Cell).use(CellGroup).use(Field).use(Tag).use(Row).use(Col).use(List).use(GoodsAction).use(GoodsActionBigBtn).use(GoodsActionMiniBtn).use(Card).use(SubmitBar).use(Switch).use(Stepper)
 //  mock数据
 import '@/mock/mock.js'
 

@@ -1,5 +1,36 @@
 <template>
   <div class="home">
+    <!-- nav-bar -->
+    <section class="navBar" ref="navBar">
+      <van-nav-bar class="nav-title" v-show="!isShow" fixed>
+        <van-icon name="search" slot="left" @click="showSearch"/>
+        <p slot="title" class="nav-title-text">首页</p>
+        <van-icon slot="right" @click="goLogin">
+          <span
+            style="font-size: 0.24rem;"
+          >{{ JSON.stringify(userInfo) === '{}' ? '未登陆' : userInfo.userName }}</span>
+        </van-icon>
+      </van-nav-bar>
+    </section>
+    <!-- 搜索 -->
+    <transition
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @before-leave="beforeLeave"
+      @leave="leave"
+    >
+      <form action="/" v-show="isShow" class="search-title">
+        <van-search
+          background="rgb(245, 245, 245)"
+          v-model="value"
+          placeholder="请输入搜索关键词"
+          show-action
+          @search="onSearch"
+          @cancel="onCancel"
+        />
+      </form>
+    </transition>
+
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <!-- 轮播图 -->
       <div class="carousel">
@@ -15,7 +46,7 @@
         <swiper class="hot-swiper" :options="swiperOption">
           <swiper-slide v-for="item in hotProducts" :key="item.name">
             <div class="hot-swiper-content">
-              <img :src="item.img" alt>
+              <img v-lazy="item.img" alt>
               <p class="hot-swiper-name">{{ item.name.substring(0, 10) + '...' }}</p>
               <p class="hot-swiper-price">￥{{ item.price }}</p>
             </div>
@@ -41,6 +72,7 @@
 // vue-awesome-swiper
 import "swiper/dist/css/swiper.css";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
+import { mapState } from "vuex";
 import axios from "axios";
 import url from "@/interface.config.js";
 
@@ -48,6 +80,10 @@ export default {
   name: "home",
   data() {
     return {
+      // 搜索框显示控制
+      isShow: false,
+      // 搜索
+      value: "",
       isLoading: false,
       carouselItem: [
         {
@@ -183,7 +219,42 @@ export default {
     swiper,
     swiperSlide
   },
+  computed: {
+    ...mapState(["status", "userInfo"])
+  },
   methods: {
+    // 展示搜索框
+    showSearch() {
+      this.isShow = true;
+    },
+    // 确定搜索
+    onSearch() {},
+    // 取消搜索
+    onCancel() {
+      this.isShow = false;
+    },
+    // 搜索框动画
+    beforeEnter(el) {
+      el.style.transform = "translateX(-100%)";
+    },
+    enter(el) {
+      el.offsetLeft;
+      el.style.transform = "translateX(0)";
+      el.style.transition = "all .5s linear";
+    },
+    beforeLeave(el) {
+      el.style.transform = "translateX(0)";
+    },
+    leave(el) {
+      el.offsetRight;
+      el.style.transform = "translateX(100%)";
+      el.style.transition = "all .5s linear";
+    },
+    // 跳转登陆
+    goLogin() {
+      // 存储url
+      this.$router.push("/profile");
+    },
     getVarietyItem() {
       return axios.get(url.getVarietyItem);
     },
@@ -284,5 +355,19 @@ export default {
     width: 2rem;
     height: 2rem;
   }
+}
+
+.nav-title {
+  z-index: 999 !important;
+  &-text {
+    font-size: 0.26rem;
+  }
+}
+.search-title {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 0.92rem;
+  z-index: 999 !important;
 }
 </style>

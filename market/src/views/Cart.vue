@@ -1,7 +1,10 @@
 <template>
   <div class="cart">
     <van-nav-bar title="购物车"></van-nav-bar>
-    <div class="card">
+    <div v-if="productList.length == 0">
+      <p class="cart-null">还没有添加物品哦~~</p>
+    </div>
+    <div class="card" v-if="productList.length != 0">
       <van-card
         tag="标签"
         v-for="(item, index) in productList"
@@ -10,11 +13,15 @@
         :price="item.price"
         :thumb="item.img"
         :desc="item.company"
-        num="2"
+        :num="item.count"
       >
-        <div slot="footer">
-          <van-button size="mini">选中</van-button>
-          <van-button size="mini" @click="delCart(item._id, index)">删除</van-button>
+        <div slot="footer" class="card-footer">
+          <van-switch
+            v-model="item.selected"
+            size="14px"
+            @change="updateSelect(item.selected, item._id)"
+          />
+          <van-button size="mini" round @click="delCart(item._id, index)">删除</van-button>
         </div>
       </van-card>
     </div>
@@ -41,7 +48,9 @@ export default {
       // reduce 方法，用于累加
       return (
         this.productList.reduce((sum, elem) => {
-          sum += elem.price;
+          if (elem.selected) {
+            sum += elem.price * elem.count;
+          }
           return sum;
         }, 0) * 100
       );
@@ -64,6 +73,26 @@ export default {
         .then(res => {
           console.log(res);
           this.productList.splice(index, 1);
+          this.$toast.success("删除成功");
+          this.$store.dispatch("getCartAction");
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 修改开关状态
+    updateSelect(checked, pid) {
+      axios({
+        url: url.updateCart,
+        method: "post",
+        data: {
+          productId: pid,
+          selected: checked
+        }
+      })
+        .then(res => {
+          console.log(res);
+          this.$toast.success("切换成功");
         })
         .catch(err => {
           console.log(err);
@@ -79,8 +108,9 @@ export default {
       }
     })
       .then(res => {
-        console.log(res.data);
         for (let item of res.data) {
+          item.productId["count"] = item.count;
+          item.productId["selected"] = item.selected;
           this.productList.push(item.productId);
         }
       })
@@ -93,11 +123,20 @@ export default {
 
 <style lang="scss" scoped>
 .cart {
-  margin-top: 0.92rem;
   margin-bottom: 1rem;
+  &-null {
+    font-size: 0.36rem;
+    text-align: center;
+    margin: 0.4rem 0;
+  }
 }
 .card {
   margin-bottom: 2rem;
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
 }
 .submit-bar {
   bottom: 1rem;

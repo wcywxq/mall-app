@@ -12,6 +12,8 @@ const cartSchema = new Schema({
     createDate: {
         type: Date,
         default: Date.now()
-    }
+    },
+    count: Number,
+    selected: Boolean
 })
 mongoose.model('Cart', cartSchema)

@@ -5,13 +5,48 @@ const mongoose = require('mongoose')
 router.post('/addCart', async ctx => {
     const Cart = mongoose.model('Cart')
     const newCart = new Cart(ctx.request.body)
-    await newCart.save().then(() => {
-        ctx.body = {
-            code: 200,
-            msg: '添加成功'
+    await Cart.findOne({
+        productId: ctx.request.body.productId
+    }).exec().then(async res => {
+        console.log(res)
+        if (res) {
+            // 如果购物车表中有该条数据
+            await Cart.updateOne({
+                productId: ctx.request.body.productId
+            }, {
+                $inc: {
+                    count: ctx.request.body.count
+                }
+            }).then(result => {
+                ctx.body = {
+                    code: 200,
+                    msg: '添加成功',
+                    data: result
+                }
+            }).catch(err => {
+                console.log(err)
+                ctx.body = {
+                    code: 500,
+                    msg: err
+                }
+            })
+        } else {
+            // 如果购物车表中无该条数据
+            await newCart.save().then(result => {
+                ctx.body = {
+                    code: 200,
+                    msg: '添加成功',
+                    data: result
+                }
+            }).catch(err => {
+                console.log(err)
+                ctx.body = {
+                    code: 500,
+                    msg: err
+                }
+            })
         }
     }).catch(err => {
-        console.log(err)
         ctx.body = {
             code: 500,
             msg: err
@@ -40,6 +75,27 @@ router.post('/delCart', async ctx => {
         ctx.body = {
             code: 201,
             msg: '删除失败'
+        }
+    })
+})
+router.post('/updateCart', async ctx => {
+    const Cart = mongoose.model('Cart')
+    await Cart.updateOne({
+        productId: ctx.request.body.productId
+    }, {
+        $set: {
+            selected: ctx.request.body.selected
+        }
+    }).then(res => {
+        ctx.body = {
+            code: 200,
+            msg: '修改成功'
+        }
+    }).catch(err => {
+        ctx.body = {
+            code: 500,
+            msg: '修改失败',
+            err: err
         }
     })
 })

@@ -1,5 +1,6 @@
 <template>
   <div class="info">
+    <van-nav-bar title="我的个人信息"></van-nav-bar>
     <van-cell-group>
       <van-cell title="用户Id" :value="$store.state.userInfo._id"/>
       <van-cell title="名称" :value="$store.state.userInfo.userName"/>
@@ -15,8 +16,6 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
-
 Date.prototype.Format = function(fmt) {
   //author: meizz
   var o = {
@@ -48,10 +47,11 @@ export default {
   },
   computed: {},
   methods: {
-    ...mapMutations(["changeStatus"]),
     exit() {
       this.$toast.success("已退出登陆");
-      this.changeStatus(0);
+      this.$store.commit("CHANGESTATUS", 0);
+      this.$store.commit("CHANGELOGIN", '{}');
+      this.$store.commit("CHANGECART", 0);
       this.$router.go(-1);
     }
   }

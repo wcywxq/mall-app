@@ -8,10 +8,19 @@
       <p class="detail-info-company">公司：{{ detail.company }}</p>
       <p class="detail-info-city">产地：{{ detail.city }}</p>
     </div>
+    <!-- 步进器 -->
+    <div class="detail-stepper">购买数量：
+      <van-stepper v-model="value"/>
+    </div>
     <div class="toolBar">
       <van-goods-action>
         <van-goods-action-mini-btn icon="chat-o" text="客服"/>
-        <van-goods-action-mini-btn icon="cart-o" text="购物车"/>
+        <van-goods-action-mini-btn
+          icon="cart-o"
+          text="购物车"
+          :info="$store.state.goodsCount"
+          @click="$router.push('/cart')"
+        />
         <van-goods-action-big-btn text="加入购物车" @click="addCart"/>
         <van-goods-action-big-btn primary text="立即购买"/>
       </van-goods-action>
@@ -28,6 +37,7 @@ export default {
   name: "detail",
   data() {
     return {
+      value: 1,
       detail: {}
     };
   },
@@ -45,18 +55,22 @@ export default {
           this.$router.push("/profile");
         }, 1000);
       } else {
-        // 插入购物车
+        //已经登陆，插入购物车
         axios({
           url: url.addCart,
           method: "post",
           data: {
+            userId: this.userInfo._id,
             productId: this.detail._id,
-            userId: this.userInfo._id
+            count: this.value,
+            selected: true
           }
         })
           .then(res => {
+            console.log(res);
             if (res.data.code == 200) {
               this.$toast.success(res.data.msg);
+              this.$store.dispatch('getCartAction')
             }
           })
           .catch(err => {
@@ -85,7 +99,6 @@ export default {
 
 <style scoped lang="scss">
 .detail {
-  margin-top: 0.92rem;
   margin-bottom: 1rem;
   &-img {
     width: 100%;
@@ -102,6 +115,13 @@ export default {
       color: #ff7300;
       font-size: 0.4rem;
     }
+  }
+  &-stepper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0 0.4rem;
+    font-size: 0.26rem;
   }
 }
 </style>
