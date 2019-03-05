@@ -1,17 +1,20 @@
 import Mock from 'mockjs'
 import data from './data.json'
-Mock.mock('http://www.weichuang.com/getList', {
+import { MOCKURL } from '../interface.config.js'
+
+
+Mock.mock(`${MOCKURL}getList`, {
     data: data.list
 })
-Mock.mock('http://www.weichuang.com/getUser', {
-    "name|2": "weichuang",
+Mock.mock(`${MOCKURL}getUser`, {
+    "name|2": "MOCKURL",
     "age|18-35": 20
 })
-Mock.mock('http://www.weichuang.com/regexp', {
+Mock.mock(`${MOCKURL}regexp`, {
     "regexp1": /[a-z][A-Z][0-9]/,
     "regexp2": /\d{5,10}/
 })
-Mock.mock('http://www.weichuang.com/list', {
+Mock.mock(`${MOCKURL}list`, {
     'info|10-20': [{
         'index|+1': 1,
         'name': '@first @last',
@@ -35,4 +38,4 @@ let productData = req => {
         }
     return productList
 }
-Mock.mock('http://www.weichuang.com/getVarietyItem', productData)
+Mock.mock(`${MOCKURL}getVarietyItem`, productData)

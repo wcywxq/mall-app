@@ -1,5 +1,5 @@
-const MOCKURL = 'http://www.weichuang.com/';
-const SERVERURL = 'http://localhost:3000/'; //真实url
+export const MOCKURL = 'https://market.conjuring.cn/';
+export const SERVERURL = 'https://market.conjuring.cn/'; //真实url
 
 const URL = {
     getList: MOCKURL + 'getList',
